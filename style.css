@@ -1,0 +1,101 @@
+/* --- CONFIGURATION GS STUDIO --- */
+:root {
+    --bg-color: #0b0e14;
+    --primary-blue: #00d4ff;
+    --primary-yellow: #fdbb2d;
+    --text-white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-hover: rgba(255, 255, 255, 0.1);
+    --border-gradient: linear-gradient(to right, #00d4ff, #fdbb2d);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-white);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* --- LOGO HEADER (320x128) --- */
+.logo-container {
+    width: 320px;
+    height: 128px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 40px 0;
+    border: 3px double transparent;
+    background: linear-gradient(var(--bg-color), var(--bg-color)) padding-box, 
+                var(--border-gradient) border-box;
+    border-radius: 4px;
+}
+
+.logo-text {
+    font-size: 2rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+    background: var(--border-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+h1 {
+    font-weight: 300;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 30px;
+}
+
+/* --- CONTENEUR DE CARTE (Pour Tapple et PW) --- */
+.app-card-full {
+    background: var(--glass);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    backdrop-filter: blur(15px);
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* --- BOUTONS --- */
+button, .btn-main {
+    background: var(--primary-blue);
+    color: var(--bg-color);
+    border: none;
+    padding: 12px 25px;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+button:hover {
+    background: var(--primary-yellow);
+    transform: scale(1.05);
+}
+
+.back-link {
+    display: block;
+    margin-top: 30px;
+    color: var(--primary-yellow);
+    text-decoration: none;
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.back-link:hover { opacity: 1; }
+
+footer {
+    margin-top: auto;
+    padding: 40px;
+    font-size: 0.8rem;
+    opacity: 0.4;
+}

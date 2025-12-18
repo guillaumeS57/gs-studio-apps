@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Générateur PW | GS Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        input[type="text"] { width: 100%; padding: 15px; background: rgba(0,0,0,0.3); border: 1px solid #333; color: white; border-radius: 8px; margin: 15px 0; box-sizing: border-box;}
+        .password-display { font-family: monospace; font-size: 1.5rem; color: var(--primary-yellow); padding: 20px; background: rgba(0,0,0,0.4); border-radius: 10px; margin-top: 20px; word-break: break-all;}
+        .feedback-list { text-align: left; font-size: 0.8rem; color: #aaa; margin-top: 15px;}
+        .button-group { display: flex; gap: 10px; margin-top: 10px;}
+        .btn-phrase { background: var(--primary-yellow); color: black;}
+    </style>
+</head>
+<body>
+    <div class="logo-container"><div class="logo-text">GS STUDIO</div></div>
+    <div class="app-card-full">
+        <h1>GÉNÉRATEUR SECURE</h1>
+        <label>Phrase Mémorable :</label>
+        <input type="text" id="phrase" readonly placeholder="Générez une phrase...">
+        <div class="button-group">
+            <button class="btn-phrase" onclick="genererPhraseGrammaticale()" style="flex:1">1. Phrase</button>
+            <button onclick="genererMotDePasse()" style="flex:1">2. Transformer</button>
+        </div>
+        <div id="resultat-container">
+            <div class="password-display">Le résultat s'affichera ici...</div>
+        </div>
+        <a href="index.html" class="back-link">← Retour au menu</a>
+    </div>
+    <script>
+    // --- DICTIONNAIRE COMPLET (M=Masculin, F=Féminin) ---
+    const dictionnaire = [
+        { mot: "bureau", genre: "M" }, { mot: "poésie", genre: "F" },
+        { mot: "plante", genre: "F" }, { mot: "voiture", genre: "F" },
+        { mot: "crayon", genre: "M" }, { mot: "tracteur", genre: "M" },
+        { mot: "voyage", genre: "M" }, { mot: "châssis", genre: "M" },
+        { mot: "vache", genre: "F" }, { mot: "guitare", genre: "F" },
+        { mot: "fleur", genre: "F" }, { mot: "poulet", genre: "M" },
+        { mot: "concert", genre: "M" }, { mot: "soleil", genre: "M" },
+        { mot: "camion", genre: "M" }, { mot: "canapé", genre: "M" },
+        { mot: "regard", genre: "M" }, { mot: "moulin", genre: "M" },
+        { mot: "chaise", genre: "F" }, { mot: "rivière", genre: "F" },
+        { mot: "montagne", genre: "F" }, { mot: "ordinateur", genre: "M" },
+        { mot: "avion", genre: "M" }, { mot: "colis", genre: "M" },
+        { mot: "drone", genre: "M" }, { mot: "figue", genre: "F" },
+        { mot: "fouet", genre: "M" }, { mot: "fraise", genre: "F" },
+        { mot: "furet", genre: "M" }, { mot: "gomme", genre: "F" },
+        { mot: "grue", genre: "F" }, { mot: "homme", genre: "M" },
+        { mot: "nuage", genre: "M" }, { mot: "palme", genre: "F" },
+        { mot: "frite", genre: "F" }, { mot: "plume", genre: "F" },
+        { mot: "peigne", genre: "M" }, { mot: "puce", genre: "F" }
+    ];
+    
+    const verbes = ["mange", "danse", "saute", "parle", "chante", "nage", "joue", "vole", "pense", "observe", "attend"];
+    const prepositions = ["sur", "dans", "avec", "pour", "devant", "derrière"];
+
+    // --- LOGIQUE GRAMMATICALE (Inchangée) ---
+
+    function getArticle(genre, motSuivant, typeArticle = "defini") {
+        const voyelles = ['a', 'e', 'i', 'o', 'u', 'y', 'h'];
+        const commenceParVoyelle = voyelles.includes(motSuivant.charAt(0).toLowerCase());
+
+        if (typeArticle === "defini") {
+            if (commenceParVoyelle) return "L'";
+            return (genre === "M") ? "Le" : "La";
+        } else if (typeArticle === "indefini") {
+            return (genre === "M") ? "Un" : "Une";
+        } else { // Demonstratif (Ce, Cette, Cet)
+             if (genre === "M" && commenceParVoyelle) return "Cet";
+             return (genre === "M") ? "Ce" : "Cette";
+        }
+    }
+
+    function genererPhraseGrammaticale() {
+        const objSujet = dictionnaire[Math.floor(Math.random() * dictionnaire.length)];
+        const typeArtSujet = Math.random() > 0.5 ? "defini" : "indefini";
+        const artSujet = getArticle(objSujet.genre, objSujet.mot, typeArtSujet);
+        const espaceSujet = (artSujet === "L'") ? "" : " ";
+
+        const verbe = verbes[Math.floor(Math.random() * verbes.length)];
+
+        let objComplement;
+        do {
+            objComplement = dictionnaire[Math.floor(Math.random() * dictionnaire.length)];
+        } while (objComplement === objSujet); 
+
+        const prep = prepositions[Math.floor(Math.random() * prepositions.length)];
+        
+        const typesPossibles = ["defini", "indefini", "demonstratif"];
+        const typeArtComp = typesPossibles[Math.floor(Math.random() * typesPossibles.length)];
+        let artComp = getArticle(objComplement.genre, objComplement.mot, typeArtComp).toLowerCase();
+        
+        const espaceComp = (artComp === "l'") ? "" : " ";
+
+        const phrase = `${artSujet}${espaceSujet}${objSujet.mot} ${verbe} ${prep} ${artComp}${espaceComp}${objComplement.mot}.`;
+        
+        document.getElementById('phrase').value = phrase;
+        document.getElementById('resultat-container').innerHTML = "<p>Phrase générée ! Cliquez maintenant sur <strong>Transformer en Mot de Passe</strong>.</p>";
+    }
+
+    // --- FONCTIONS DE SÉCURITÉ ---
+
+    // Fonction pour remplacer UN caractère au hasard parmi toutes ses occurrences (Inchangée)
+    function remplacerAleatoirement(texte, lettreCible, lettreRemplacement) {
+        let indices = [];
+        for (let i = 0; i < texte.length; i++) {
+            if (texte[i] === lettreCible) {
+                indices.push(i);
+            }
+        }
+
+        if (indices.length === 0) return texte;
+
+        const indexChoisi = indices[Math.floor(Math.random() * indices.length)];
+
+        return texte.substring(0, indexChoisi) + lettreRemplacement + texte.substring(indexChoisi + 1);
+    }
+    
+    // Fonction pour appliquer 2 majuscules aléatoires, sans toucher aux séparateurs/substitutions (NOUVEAU)
+    function appliquerMajusculesAleatoires(password) {
+        const caracteresExclus = ['@', '3', '!', '$', '0', '|', '-', '_', ' ', '.'];
+        let indicesValides = [];
+
+        // 1. Trouver tous les indices qui ne sont PAS des séparateurs ou des substitutions
+        for (let i = 0; i < password.length; i++) {
+            const char = password[i];
+            // Vérifier que le caractère est une minuscule et qu'il n'est pas exclu
+            if (char >= 'a' && char <= 'z' && !caracteresExclus.includes(char)) {
+                indicesValides.push(i);
+            }
+        }
+        
+        // S'il n'y a pas assez de lettres valides, on ne fait rien
+        if (indicesValides.length < 2) return password; 
+
+        let newPassword = password;
+        let positionsMajuscules = [];
+
+        // 2. Choisir 2 positions uniques aléatoires parmi les indices valides
+        for (let k = 0; k < 2; k++) {
+            // Créer une copie du tableau d'indices valides pour le shuffle
+            let indicesRestants = indicesValides.filter(i => !positionsMajuscules.includes(i));
+            
+            if (indicesRestants.length === 0) break; // Arrêter si on a déjà tout capitalisé
+            
+            const randomValidIndex = indicesRestants[Math.floor(Math.random() * indicesRestants.length)];
+            positionsMajuscules.push(randomValidIndex);
+        }
+
+        // 3. Appliquer la majuscule aux positions choisies
+        for (const index of positionsMajuscules) {
+            // Remplacer le caractère à cet index par sa version majuscule
+            newPassword = newPassword.substring(0, index) 
+                        + newPassword.charAt(index).toUpperCase() 
+                        + newPassword.substring(index + 1);
+        }
+
+        return newPassword;
+    }
+    
+    function evaluerForce(password) {
+        let score = 0;
+        let feedback = [];
+        
+        if (password.length >= 15) { score += 3; feedback.push("Longueur excellente (15+)"); } 
+        else if (password.length >= 10) { score += 1; feedback.push("Longueur correcte (10+)"); }
+
+        let charTypes = 0;
+        if (/[a-z]/.test(password)) charTypes++;
+        if (/[A-Z]/.test(password)) charTypes++;
+        if (/[0-9]/.test(password)) charTypes++;
+        if (/[^a-zA-Z0-9\s]/.test(password)) charTypes++;
+        
+        score += charTypes * 2;
+
+        if (password.includes('-') || password.includes('_') || password.includes('!') || password.includes('@') || password.includes('$') || password.includes('|')) {
+             score += 2;
+             feedback.push("Utilisation de symboles/séparateurs variés.");
+        }
+        
+        let force = "Faible";
+        let couleur = "#e74c3c";
+
+        if (score >= 12) { force = "Très Fort"; couleur = "#27ae60"; } 
+        else if (score >= 8) { force = "Fort"; couleur = "#f1c40f"; } 
+        else if (score >= 5) { force = "Moyen"; couleur = "#e67e22"; }
+
+        return { score, force, couleur, feedback };
+    }
+
+    // --- GÉNÉRATION DU MDP (Logique finale) ---
+    function genererMotDePasse() {
+        let phrase = document.getElementById('phrase').value;
+
+        if (!phrase || phrase.trim() === "") {
+            alert("Veuillez d'abord générer une phrase.");
+            return;
+        }
+        
+        // Étape 1 : Nettoyage et séparation
+        let cleanedPhrase = phrase.replace(/['\.\,\!\?]/g, ' ').trim(); 
+        let mots = cleanedPhrase.split(/\s+/).filter(mot => mot.length > 0);
+        
+        if (mots.length < 3) {
+             document.getElementById('resultat-container').innerHTML = "<p style='color:red'>La phrase doit contenir au moins 3 mots.</p>";
+             return;
+        }
+
+        // Étape 2 : Définition des 2 positions de remplacement ALÉATOIRES (séparateurs)
+        const nbSeparateurs = mots.length - 1; 
+        const separateursCaractere = ['-', '_']; 
+        
+        let positionsRemplacement = [];
+        if (nbSeparateurs >= 2) {
+            const pos1 = Math.floor(Math.random() * nbSeparateurs);
+            positionsRemplacement.push(pos1);
+            let pos2;
+            do {
+                pos2 = Math.floor(Math.random() * nbSeparateurs);
+            } while (pos2 === pos1);
+            positionsRemplacement.push(pos2);
+        } else if (nbSeparateurs === 1) {
+            positionsRemplacement.push(0);
+        }
+
+        let passwordFinal = mots[0].toLowerCase(); 
+        for (let i = 1; i < mots.length; i++) {
+            const separateurIndex = i - 1; 
+            let separateurUtilise = ' '; 
+            
+            if (positionsRemplacement.includes(separateurIndex)) {
+                separateurUtilise = separateursCaractere[Math.floor(Math.random() * separateursCaractere.length)];
+            }
+            
+            passwordFinal += separateurUtilise + mots[i].toLowerCase();
+        }
+        
+        let password = passwordFinal; 
+
+        // Étape 3 : 3 Substitutions de Caractères Spéciaux 
+        const candidatesSubstitutions = [
+            { cible: 'a', remplacement: '@' },
+            { cible: 'e', remplacement: '3' },
+            { cible: 'i', remplacement: '!' },
+            { cible: 's', remplacement: '$' } 
+        ];
+
+        let shuffledCandidates = [...candidatesSubstitutions];
+        for (let i = shuffledCandidates.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledCandidates[i], shuffledCandidates[j]] = [shuffledCandidates[j], shuffledCandidates[i]];
+        }
+        
+        const substitutionsToApply = shuffledCandidates.slice(0, 3); 
+
+        substitutionsToApply.forEach(sub => {
+            password = remplacerAleatoirement(password, sub.cible, sub.remplacement);
+        });
+        
+        // Étape 4 : Application des 2 MAJUSCULES ALÉATOIRES (sur position non substituée)
+        password = appliquerMajusculesAleatoires(password);
+        
+        // Étape 5 : Ponctuation finale
+        password += '.'; 
+
+        // Étape 6 : Évaluation et affichage
+        const evaluation = evaluerForce(password);
+
+        let resultatHTML = `
+            <div class="password-display" style="border-color: ${evaluation.couleur}; color: ${evaluation.couleur};">
+                ${password}
+            </div>            
+            
+            <div class="feedback-list">
+                <p><strong>Force :</strong> <span style="color:${evaluation.couleur}; font-weight:bold;">${evaluation.force}</span></p>
+                <ul>
+                    ${evaluation.feedback.map(item => `<li>${item}</li>`).join('')}
+                    <li>3 substitutions de caractères spéciaux (parmi 6) appliquées aléatoirement.</li>
+                    <li>2 séparateurs non-espace ('-' ou '_') appliqués aléatoirement.</li>
+                    <li>2 **Majuscules aléatoires** sur des lettres non substituées.</li>
+                </ul>
+            </div>
+        `;
+
+        document.getElementById('resultat-container').innerHTML = resultatHTML;
+    }    
+
+</script>
+</body>
+</html>

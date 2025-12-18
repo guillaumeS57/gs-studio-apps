@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Tapple + | GS Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .diff-btn { background: none; border: 1px solid #444; color: white; margin: 5px; border-radius: 5px; cursor: pointer;}
+        .diff-btn.active[data-level="Facile"] { border-color: #4caf50; color: #4caf50; }
+        .diff-btn.active[data-level="Moyen"] { border-color: #ff9800; color: #ff9800; }
+        .diff-btn.active[data-level="Difficile"] { border-color: #f44336; color: #f44336; }
+        #category { font-size: 1.8rem; margin: 30px 0; min-height: 80px; color: var(--primary-blue); font-weight: bold; border: 1px dashed rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;}
+        .count { font-size: 0.7rem; opacity: 0.5; margin-top: 20px;}
+    </style>
+</head>
+<body>
+    <div class="logo-container"><div class="logo-text">GS STUDIO</div></div>
+    <div class="app-card-full">
+        <h1 style="color: var(--primary-yellow)">TAPPLE +</h1>
+        <div class="difficulty-selector">
+            <button class="diff-btn active" data-level="Facile" onclick="setDifficulty('Facile')">Facile</button>
+            <button class="diff-btn" data-level="Moyen" onclick="setDifficulty('Moyen')">Moyen</button>
+            <button class="diff-btn" data-level="Difficile" onclick="setDifficulty('Difficile')">Difficile</button>
+        </div>
+        <div id="category">Choisissez un niveau et cliquez !</div>
+        <button onclick="newCategory()" style="width: 100%;">NOUVELLE CATÉGORIE</button>
+        <div class="count" id="stat">230+ catégories chargées</div>
+        <a href="index.html" class="back-link">← Retour au menu</a>
+    </div>
+    
+<script>
+    const data = {
+        "Facile": [
+            "Marques de voitures", "Légumes verts", "Destinations de vacances", "Sports olympiques", "Animaux d'Afrique", "Choses bleues", "Dessins animés", "Pays d'Europe", "Séries Netflix", "Fruits exotiques", "Jeux vidéo", "Matières scolaires", "Fromages", "Animaux de la ferme", "Plats italiens", "Instruments de musique", "Marques de soda", "Planètes", "Couleurs de cheveux", "Moyens de transport", "Pâtisseries", "Insectes", "Villes de France", "Poissons", "Prénoms masculins", "Prénoms féminins", "Magasins", "Oiseaux", "Marques de téléphone", "Sports de combat", "Choses que l'on boit", "Fournitures scolaires", "Animaux domestiques", "Choses froides", "Choses chaudes", "Jeux de société", "Parties du corps", "Capitales du monde", "Pays d'Asie", "Pays d'Amérique", "Jouets d'enfants", "Marques de sport", "Météo", "Choses qui volent", "Sacs", "Acteurs célèbres", "Actrices célèbres", "Boissons alcoolisées", "Produits laitiers", "Choses jaunes", "Choses vertes", "Choses rouges", "Choses noires", "Choses blanches", "Lieux publics", "Animaux marins", "Objets de décoration", "Sites internet", "Marques de maquillage", "Bruits de la nature", "Choses qui font rire", "Vampires et monstres", "Choses avec des roues", "Choses avec des ailes"
+        ],
+        "Moyen": [
+            "Objets dans un sac à main", "Choses qui font du bruit", "Ustensiles de cuisine", "Super-héros", "Titres de films d'action", "Métiers de rêve", "Marques de chaussures", "Outils de bricolage", "Choses qui piquent", "Ingrédients de sandwich", "Mots doux", "Choses qu'on trouve au grenier", "Inventions célèbres", "Choses qui sentent bon", "Composants d'un ordinateur", "Dinosaures", "Rivières et fleuves", "Marques de luxe", "Objets de bureau", "Arbres", "Activités de plage", "Accessoires de mode", "Vêtements d'hiver", "Objets en plastique", "Outils de jardinage", "Choses sucrées", "Épices", "Lieux de vacances", "Objets dans une salle de bain", "Personnages historiques", "Ustensiles de ménage", "Métiers de la santé", "Émissions de télé", "Loisirs créatifs", "Types de chaussures", "Bijoux", "Meubles", "Signes du zodiaque", "Adjectifs (description)", "Objets dans un garage", "Choses fragiles", "Tissus", "Métaux", "Choses que l'on trouve à la mer", "Monuments célèbres", "Objets dans une chambre", "Types de musiques", "Écrivains", "Céréales", "Choses amères", "Choses salées", "Choses acides", "Choses lourdes", "Choses légères", "Outils de cuisine", "Qualités", "Défauts", "Lieux de culte", "Instruments à cordes", "Instruments à vent", "Choses transparentes", "Choses en bois", "Choses en métal", "Émotions", "Héros de BD", "Méchants de films", "Produits de supermarché", "Objets dans une pharmacie", "Choses qu'on trouve au parc", "Célébrités sportives", "Chansons connues", "Marques de chocolat", "Parfums de glace", "Types de pâtes", "Coquillages", "Objets de camping", "Accessoires de sport", "Jeux de cartes", "Fêtes du calendrier", "Saisons", "Outils de mesure", "Types de chapeaux", "Objets dans un portefeuille", "Choses que l'on fait le matin", "Animaux polaires", "Éclairage", "Choses électriques", "Choses à piles", "Produits de beauté", "Médicaments", "Choses qui tournent", "Choses qui glissent", "Choses collantes", "Choses dures", "Choses molles", "Moyens de communication", "Lieux de travail", "Choses gratuites", "Choses anciennes", "Choses modernes", "Inventions 20ème siècle", "Types de bateaux", "Matériel de dessin", "Choses au zoo", "Choses dans un musée", "Choses dans un aéroport", "Objets de collection", "Choses que l'on perd souvent", "Légumes racines", "Herbes aromatiques", "Types de sandwichs", "Choses avec des boutons", "Choses avec un écran"
+        ],
+        "Difficile": [
+            "Célébrités chauves", "Rois ou Reines", "Fleurs", "Artistes peintres", "Verbes d'action", "Pierres précieuses", "Choses qui brillent", "Matières premières", "Choses qui sentent mauvais", "Mots finissant par -ion", "Mots commençant par pré-", "Compositeurs de musique", "Choses qui se mangent crues", "Choses qui se mangent cuites", "Mots de 3 lettres", "Mots de 10 lettres", "Choses chères", "Objets technologiques", "Types d'avions", "Véhicules de secours", "Choses à la foire", "Choses dans un cirque", "Choses dans une gare", "Choses immatérielles", "Baies", "Choses ennuyeuses", "Lieux imaginaires", "Créatures mythologiques", "Sujets de conversation", "Choses que l'on cache", "Objets de mariage", "Objets de bébé"
+        ]
+    };
+
+    let currentDifficulty = "Facile";
+
+    function setDifficulty(level) {
+        currentDifficulty = level;
+        document.querySelectorAll('.diff-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if(btn.getAttribute('data-level') === level) btn.classList.add('active');
+        });
+    }
+
+    function newCategory() {
+        const list = data[currentDifficulty];
+        const randomIndex = Math.floor(Math.random() * list.length);
+        document.getElementById('category').innerText = list[randomIndex];
+    }
+</script>
+</body>
+</html>

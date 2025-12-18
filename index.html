@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GS Studio - Hub Applications</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .menu-container { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+        .app-card {
+            text-decoration: none; color: white; width: 250px; padding: 40px;
+            background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px; text-align: center; transition: 0.3s;
+        }
+        .app-card:hover { border-color: var(--primary-blue); transform: translateY(-5px); }
+        .app-title { color: var(--primary-yellow); font-weight: bold; font-size: 1.3rem; margin-bottom: 10px; }
+    </style>
+	<link rel="manifest" href="manifest.json">
+	<meta name="theme-color" content="#00d4ff">
+
+	<script>
+	  // Enregistrement du Service Worker pour activer la PWA
+	  if ('serviceWorker' in navigator) {
+		navigator.serviceWorker.register('sw.js');
+	  }
+	</script>
+</head>
+<body>
+    <div class="logo-container"><div class="logo-text">GS STUDIO</div></div>
+    <h1>Sélectionnez une application</h1>
+    <div class="menu-container">
+        <a href="GenerateurPW.html" class="app-card">
+            <div class="app-title">GenerateurPW</div>
+            <div>Générateur de mot de passe fort et sécurisé.</div>
+        </a>
+        <a href="Tapple.html" class="app-card">
+            <div class="app-title">Tapple</div>
+            <div>Accédez à la catégorie Tapple</div>
+        </a>
+    </div>
+    <footer>&copy; 2025 GS Studio - Engineering Excellence</footer>
+</body>
+</html>
