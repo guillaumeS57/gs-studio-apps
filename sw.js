@@ -1,4 +1,12 @@
-const CACHE_NAME = 'gs-studio-v1.2';
+
+const CACHE_NAME = 'gs-studio-v1.0.2'; // Assurez-vous que cette variable existe
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'GET_VERSION') {
+    // On renvoie le nom du cache au port qui a posé la question
+    event.ports[0].postMessage(CACHE_NAME);
+  }
+});
+
 const ASSETS = [
   'index.html',
   'Tapple.html',
@@ -26,4 +34,5 @@ self.addEventListener('message', (event) => {
     event.ports[0].postMessage(CACHE_NAME);
   }
 });
+
 
