@@ -1,12 +1,4 @@
-
-const CACHE_NAME = 'gs-studio-v1.0.2'; // Assurez-vous que cette variable existe
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'GET_VERSION') {
-    // On renvoie le nom du cache au port qui a posé la question
-    event.ports[0].postMessage(CACHE_NAME);
-  }
-});
-
+const CACHE_NAME = 'gs-studio-v1.0.2';
 const ASSETS = [
   'index.html',
   'Tapple.html',
@@ -15,24 +7,35 @@ const ASSETS = [
   'manifest.json'
 ];
 
-// Installation du Service Worker
+// Installation : Mise en cache des fichiers
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
+  self.skipWaiting(); // Force la mise à jour immédiate
 });
 
-// Intercepter les requêtes pour servir le cache
+// Activation : Nettoyage des anciens caches
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+      );
+    })
+  );
+});
+
+// Fetch : Nécessaire pour l'installation sur Android
 self.addEventListener('fetch', (e) => {
   e.respondWith(
     caches.match(e.request).then((response) => response || fetch(e.request))
   );
 });
 
+// Message : Répond à la demande de version de index.html
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'GET_VERSION') {
     event.ports[0].postMessage(CACHE_NAME);
   }
 });
-
-

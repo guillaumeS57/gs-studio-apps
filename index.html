@@ -1,11 +1,18 @@
+<!DOCTYPE html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GS Studio | Menu</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
     <style>
-        body { margin: 0; padding: 10px; box-sizing: border-box; font-family: sans-serif; }
+        body { margin: 0; padding: 10px; box-sizing: border-box; font-family: sans-serif; background-color: #0b0e14; color: white; }
         .container-full, .menu-vertical { width: 100% !important; max-width: none !important; }
-        .app-card { width: 100%; margin-bottom: 15px; padding: 25px; box-sizing: border-box; }
-        .app-title { font-size: 1.5rem; }
+        .app-card { width: 100%; margin-bottom: 15px; padding: 25px; box-sizing: border-box; display: block; text-decoration: none; background: #1a1d23; border-radius: 12px; border: 1px solid #333; }
+        .app-title { font-size: 1.5rem; color: #00d4ff; font-weight: bold; }
+        .app-desc { color: #aaa; margin-top: 5px; }
+        footer { text-align: center; margin-top: 20px; color: #666; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -22,36 +29,29 @@
             <div class="app-desc">Système de score inclus (10 pts).</div>
         </a>
     </div>
+
     <footer>
-        &copy; 2025 GS STUDIO - <span id="app-version">Chargement version...</span>
+        &copy; 2025 GS STUDIO - <span id="app-version">Recherche version...</span>
     </footer>
-   <script>
+
+<script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').then((reg) => {
-      // On s'assure que le service worker est prêt
       navigator.serviceWorker.ready.then((registration) => {
         const getVersion = () => {
           if (!registration.active) return;
-
           const messageChannel = new MessageChannel();
           messageChannel.port1.onmessage = (event) => {
-            // Mise à jour du texte avec la version reçue
-            document.getElementById('app-version').innerText = event.data;
+            document.getElementById('app-version').innerText = "Version: " + event.data;
           };
-
-          // Envoi de la requête
           registration.active.postMessage({type: 'GET_VERSION'}, [messageChannel.port2]);
         };
-
-        // On tente de récupérer la version immédiatement
         getVersion();
-
-        // Si le SW change (mise à jour), on redemande la version
+        // Redemander la version si le service worker est mis à jour
         registration.addEventListener('updatefound', getVersion);
       });
     });
   }
 </script>
-
 </body>
-
+</html>
