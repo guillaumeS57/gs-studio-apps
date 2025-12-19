@@ -5,12 +5,26 @@
     <title>Générateur PW | GS Studio</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        input[type="text"] { width: 100%; padding: 15px; background: rgba(0,0,0,0.3); border: 1px solid #333; color: white; border-radius: 8px; margin: 15px 0; box-sizing: border-box;}
-        .password-display { font-family: monospace; font-size: 1.5rem; color: var(--primary-yellow); padding: 20px; background: rgba(0,0,0,0.4); border-radius: 10px; margin-top: 20px; word-break: break-all;}
-        .feedback-list { text-align: left; font-size: 0.8rem; color: #aaa; margin-top: 15px;}
-        .button-group { display: flex; gap: 10px; margin-top: 10px;}
-        .btn-phrase { background: var(--primary-yellow); color: black;}
-    </style>
+    body { padding: 10px; box-sizing: border-box; }
+    .container-full { width: 100%; max-width: none; box-sizing: border-box; }
+    input[type="text"] { 
+        width: 100%; 
+        padding: 20px !important; /* Plus grand pour mobile */
+        font-size: 25px !important; 
+        box-sizing: border-box;
+    }
+    button { 
+        width: 100%; 
+        height: 60px; /* Plus haut pour le doigt */
+        margin-bottom: 10px; 
+        font-size: 1.1rem;
+    }
+    .password-display { 
+        font-size: 30px; 
+        padding: 25px; 
+        margin-top: 15px;
+    }
+</style>
 </head>
 <body>
     <div class="logo-container"><div class="logo-text">GS STUDIO</div></div>

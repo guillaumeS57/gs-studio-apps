@@ -1,23 +1,27 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
+    <style>
+        body { margin: 0; padding: 10px; box-sizing: border-box; font-family: sans-serif; }
+        .container-full, .menu-vertical { width: 100% !important; max-width: none !important; }
+        .app-card { width: 100%; margin-bottom: 15px; padding: 25px; box-sizing: border-box; }
+        .app-title { font-size: 1.5rem; }
+    </style>
 </head>
 <body>
     <div class="logo-container"><div class="logo-text">GS STUDIO</div></div>
-    <h1>Applications Web</h1>
+    <h1 style="text-align: center;">Applications Web</h1>
     
-    <div class="menu-vertical" style="max-width: 400px; width: 100%;">
+    <div class="menu-vertical">
         <a href="GenerateurPW.html" class="app-card">
             <div class="app-title">🛡️ GenerateurPW</div>
-            <div class="app-desc">Créez des mots de passe robustes instantanément.</div>
+            <div class="app-desc">Créez des mots de passe robustes.</div>
         </a>
         <a href="Tapple.html" class="app-card">
-            <div class="app-title">🎮 Tapple</div>
-            <div class="app-desc">Le jeu de catégories pour vos soirées.</div>
+            <div class="app-title">🎮 Tapple +</div>
+            <div class="app-desc">Système de score inclus (10 pts).</div>
         </a>
     </div>
 
-    <footer>&copy; 2024 GS STUDIO</footer>
-    <script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }</script>
+    <footer style="text-align: center; margin-top: 20px;">&copy; 2024 GS STUDIO</footer>
 </body>

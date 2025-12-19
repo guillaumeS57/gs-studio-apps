@@ -2,67 +2,109 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tapple + | GS Studio</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .diff-btn { background: none; border: 1px solid #444; color: white; margin: 5px; border-radius: 5px; cursor: pointer;}
-        .diff-btn.active[data-level="Facile"] { border-color: #4caf50; color: #4caf50; }
-        .diff-btn.active[data-level="Moyen"] { border-color: #ff9800; color: #ff9800; }
-        .diff-btn.active[data-level="Difficile"] { border-color: #f44336; color: #f44336; }
-        #category { font-size: 1.8rem; margin: 30px 0; min-height: 80px; color: var(--primary-blue); font-weight: bold; border: 1px dashed rgba(255,255,255,0.1); padding: 20px; border-radius: 10px;}
-        .count { font-size: 0.7rem; opacity: 0.5; margin-top: 20px;}
+        body { padding: 10px; margin: 0; box-sizing: border-box; }
+        .container-full { width: 100%; max-width: none; padding: 10px; box-sizing: border-box; }
+        #category { font-size: 40px; margin: 20px 0; min-height: 100px; color: var(--primary-blue); font-weight: bold; border: 2px dashed rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; text-align: center; border-radius: 15px; }
+        .setup-players { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        .player-input { width: 100%; padding: 12px; margin: 5px 0; border-radius: 8px; border: 1px solid #444; background: #222; color: white; box-sizing: border-box; }
+        .score-board { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
+        .player-card { background: #333; padding: 15px; border-radius: 10px; text-align: center; border: 2px solid transparent; }
+        .player-card.winner { border-color: var(--primary-yellow); background: #443300; }
+        .score-val { font-size: 2rem; display: block; color: var(--primary-yellow); }
+        .btn-point { background: #4caf50; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; margin-top: 10px; font-weight: bold; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
     <div class="logo-container"><div class="logo-text">GS STUDIO</div></div>
     
     <div class="container-full">
-        <h2 style="color:var(--primary-yellow); margin-top:0;">TAPPLE +</h2>
-        
-        <div id="category" style="font-size: 1.5rem; padding: 30px 10px; color: var(--primary-blue); font-weight: bold; min-height: 120px; display: flex; align-items: center; justify-content: center;">
-            Prêt à jouer ?
+        <h2 style="color:var(--primary-yellow); text-align:center;">TAPPLE +</h2>
+
+        <div id="setup-area" class="setup-players">
+            <p>Noms des joueurs (2 à 4) :</p>
+            <input type="text" class="player-input" placeholder="Joueur 1" id="p1">
+            <input type="text" class="player-input" placeholder="Joueur 2" id="p2">
+            <input type="text" class="player-input" placeholder="Joueur 3 (Optionnel)" id="p3">
+            <input type="text" class="player-input" placeholder="Joueur 4 (Optionnel)" id="p4">
+            <button onclick="startGame()" style="margin-top:10px; background: var(--primary-blue);">LANCER LA PARTIE</button>
         </div>
 
-        <button onclick="newCategory()" style="background: var(--primary-yellow); font-size: 1.3rem; height: 80px;">
-            NOUVELLE CATÉGORIE
-        </button>
+        <div id="game-area" class="hidden">
+            <div id="category">Cliquez pour commencer</div>
+            <button onclick="newCategory()" style="background: var(--primary-yellow); font-size: 1.3rem; height: 70px; width:100%;">
+                NOUVELLE CATÉGORIE
+            </button>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-top: 20px;">
-            <button class="diff-btn" onclick="setDifficulty('Facile')" style="min-height: 40px; font-size: 0.8rem;">Facile</button>
-            <button class="diff-btn" onclick="setDifficulty('Moyen')" style="min-height: 40px; font-size: 0.8rem;">Moyen</button>
-            <button class="diff-btn" onclick="setDifficulty('Difficile')" style="min-height: 40px; font-size: 0.8rem;">Expert</button>
+            <div id="score-board" class="score-board"></div>
+            
+            <button onclick="resetGame()" style="margin-top:20px; background:#666; font-size:20px;">Réinitialiser la partie</button>
         </div>
 
         <a href="index.html" class="back-link">← Retour au menu</a>
     </div>
     
 <script>
-    const data = {
-        "Facile": [
-            "Marques de voitures", "Légumes verts", "Destinations de vacances", "Sports olympiques", "Animaux d'Afrique", "Choses bleues", "Dessins animés", "Pays d'Europe", "Séries Netflix", "Fruits exotiques", "Jeux vidéo", "Matières scolaires", "Fromages", "Animaux de la ferme", "Plats italiens", "Instruments de musique", "Marques de soda", "Planètes", "Couleurs de cheveux", "Moyens de transport", "Pâtisseries", "Insectes", "Villes de France", "Poissons", "Prénoms masculins", "Prénoms féminins", "Magasins", "Oiseaux", "Marques de téléphone", "Sports de combat", "Choses que l'on boit", "Fournitures scolaires", "Animaux domestiques", "Choses froides", "Choses chaudes", "Jeux de société", "Parties du corps", "Capitales du monde", "Pays d'Asie", "Pays d'Amérique", "Jouets d'enfants", "Marques de sport", "Météo", "Choses qui volent", "Sacs", "Acteurs célèbres", "Actrices célèbres", "Boissons alcoolisées", "Produits laitiers", "Choses jaunes", "Choses vertes", "Choses rouges", "Choses noires", "Choses blanches", "Lieux publics", "Animaux marins", "Objets de décoration", "Sites internet", "Marques de maquillage", "Bruits de la nature", "Choses qui font rire", "Vampires et monstres", "Choses avec des roues", "Choses avec des ailes"
-        ],
-        "Moyen": [
-            "Objets dans un sac à main", "Choses qui font du bruit", "Ustensiles de cuisine", "Super-héros", "Titres de films d'action", "Métiers de rêve", "Marques de chaussures", "Outils de bricolage", "Choses qui piquent", "Ingrédients de sandwich", "Mots doux", "Choses qu'on trouve au grenier", "Inventions célèbres", "Choses qui sentent bon", "Composants d'un ordinateur", "Dinosaures", "Rivières et fleuves", "Marques de luxe", "Objets de bureau", "Arbres", "Activités de plage", "Accessoires de mode", "Vêtements d'hiver", "Objets en plastique", "Outils de jardinage", "Choses sucrées", "Épices", "Lieux de vacances", "Objets dans une salle de bain", "Personnages historiques", "Ustensiles de ménage", "Métiers de la santé", "Émissions de télé", "Loisirs créatifs", "Types de chaussures", "Bijoux", "Meubles", "Signes du zodiaque", "Adjectifs (description)", "Objets dans un garage", "Choses fragiles", "Tissus", "Métaux", "Choses que l'on trouve à la mer", "Monuments célèbres", "Objets dans une chambre", "Types de musiques", "Écrivains", "Céréales", "Choses amères", "Choses salées", "Choses acides", "Choses lourdes", "Choses légères", "Outils de cuisine", "Qualités", "Défauts", "Lieux de culte", "Instruments à cordes", "Instruments à vent", "Choses transparentes", "Choses en bois", "Choses en métal", "Émotions", "Héros de BD", "Méchants de films", "Produits de supermarché", "Objets dans une pharmacie", "Choses qu'on trouve au parc", "Célébrités sportives", "Chansons connues", "Marques de chocolat", "Parfums de glace", "Types de pâtes", "Coquillages", "Objets de camping", "Accessoires de sport", "Jeux de cartes", "Fêtes du calendrier", "Saisons", "Outils de mesure", "Types de chapeaux", "Objets dans un portefeuille", "Choses que l'on fait le matin", "Animaux polaires", "Éclairage", "Choses électriques", "Choses à piles", "Produits de beauté", "Médicaments", "Choses qui tournent", "Choses qui glissent", "Choses collantes", "Choses dures", "Choses molles", "Moyens de communication", "Lieux de travail", "Choses gratuites", "Choses anciennes", "Choses modernes", "Inventions 20ème siècle", "Types de bateaux", "Matériel de dessin", "Choses au zoo", "Choses dans un musée", "Choses dans un aéroport", "Objets de collection", "Choses que l'on perd souvent", "Légumes racines", "Herbes aromatiques", "Types de sandwichs", "Choses avec des boutons", "Choses avec un écran"
-        ],
-        "Difficile": [
-            "Célébrités chauves", "Rois ou Reines", "Fleurs", "Artistes peintres", "Verbes d'action", "Pierres précieuses", "Choses qui brillent", "Matières premières", "Choses qui sentent mauvais", "Mots finissant par -ion", "Mots commençant par pré-", "Compositeurs de musique", "Choses qui se mangent crues", "Choses qui se mangent cuites", "Mots de 3 lettres", "Mots de 10 lettres", "Choses chères", "Objets technologiques", "Types d'avions", "Véhicules de secours", "Choses à la foire", "Choses dans un cirque", "Choses dans une gare", "Choses immatérielles", "Baies", "Choses ennuyeuses", "Lieux imaginaires", "Créatures mythologiques", "Sujets de conversation", "Choses que l'on cache", "Objets de mariage", "Objets de bébé"
-        ]
-    };
+    const allCategories = [
+        "Marques de voitures", "Légumes verts", "Destinations de vacances", "Sports olympiques", "Animaux d'Afrique", "Choses bleues", "Dessins animés", "Pays d'Europe", "Séries Netflix", "Fruits exotiques", "Jeux vidéo", "Matières scolaires", "Fromages", "Animaux de la ferme", "Plats italiens", "Instruments de musique", "Marques de soda", "Planètes", "Moyens de transport", "Pâtisseries", "Insectes", "Villes de France", "Poissons", "Prénoms masculins", "Prénoms féminins", "Oiseaux", "Marques de téléphone", "Sports de combat", "Choses que l'on boit", "Fournitures scolaires", "Animaux domestiques", "Choses froides", "Choses chaudes", "Jeux de société", "Parties du corps", "Capitales du monde", "Pays d'Asie", "Pays d'Amérique", "Jouets d'enfants", "Marques de sport", "Choses qui volent", "Sacs", "Acteurs célèbres", "Actrices célèbres", "Boissons alcoolisées", "Produits laitiers", "Lieux publics", "Animaux marins", "Objets de décoration", "Sites internet", "Objets dans un sac à main", "Choses qui font du bruit", "Ustensiles de cuisine", "Super-héros", "Métiers de rêve", "Marques de chaussures", "Outils de bricolage", "Choses qui piquent", "Ingrédients de sandwich", "Dinosaures", "Rivières et fleuves", "Marques de luxe", "Objets de bureau", "Arbres", "Activités de plage", "Vêtements d'hiver", "Épices", "Personnages historiques", "Métiers de la santé", "Émissions de télé", "Signes du zodiaque", "Monuments célèbres", "Écrivains", "Célébrités sportives", "Chansons connues", "Parfums de glace", "Types de pâtes", "Objets de camping", "Outils de mesure", "Animaux polaires", "Célébrités chauves", "Rois ou Reines", "Fleurs", "Artistes peintres", "Pierres précieuses", "Créatures mythologiques"
+    ];
 
-    let currentDifficulty = "Facile";
+    let players = [];
 
-    function setDifficulty(level) {
-        currentDifficulty = level;
-        document.querySelectorAll('.diff-btn').forEach(btn => {
-            btn.classList.remove('active');
-            if(btn.getAttribute('data-level') === level) btn.classList.add('active');
+    function startGame() {
+        players = [];
+        for(let i=1; i<=4; i++) {
+            let name = document.getElementById('p'+i).value.trim();
+            if(name || (i <= 2 && name === "")) { 
+                players.push({ name: name || "Joueur "+i, score: 0 });
+            }
+        }
+        if(players.length < 2) return alert("Il faut au moins 2 joueurs");
+        
+        document.getElementById('setup-area').classList.add('hidden');
+        document.getElementById('game-area').classList.remove('hidden');
+        renderScores();
+    }
+
+    function renderScores() {
+        const board = document.getElementById('score-board');
+        board.innerHTML = '';
+        players.forEach((p, index) => {
+            const card = document.createElement('div');
+            card.className = `player-card ${p.score >= 10 ? 'winner' : ''}`;
+            card.innerHTML = `
+                <strong>${p.name}</strong>
+                <span class="score-val">${p.score}</span>
+                <button class="btn-point" onclick="addPoint(${index})">+1 Point</button>
+            `;
+            board.appendChild(card);
         });
     }
 
+    function addPoint(index) {
+        if(players.some(p => p.score >= 10)) return;
+        players[index].score++;
+        if(players[index].score >= 10) {
+            document.getElementById('category').innerText = "🏆 " + players[index].name + " GAGNE !";
+        }
+        renderScores();
+    }
+
     function newCategory() {
-        const list = data[currentDifficulty];
-        const randomIndex = Math.floor(Math.random() * list.length);
-        document.getElementById('category').innerText = list[randomIndex];
+        if(players.some(p => p.score >= 10)) return;
+        const randomIndex = Math.floor(Math.random() * allCategories.length);
+        document.getElementById('category').innerText = allCategories[randomIndex];
+    }
+
+    function resetGame() {
+        if(confirm("Recommencer une partie ?")) {
+            document.getElementById('setup-area').classList.remove('hidden');
+            document.getElementById('game-area').classList.add('hidden');
+        }
     }
 </script>
 </body>
