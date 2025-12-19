@@ -14,17 +14,20 @@
 </head>
 <body>
     <div class="logo-container"><div class="logo-text">GS STUDIO</div></div>
-    <div class="app-card-full">
-        <h1>GÉNÉRATEUR SECURE</h1>
-        <label>Phrase Mémorable :</label>
-        <input type="text" id="phrase" readonly placeholder="Générez une phrase...">
-        <div class="button-group">
-            <button class="btn-phrase" onclick="genererPhraseGrammaticale()" style="flex:1">1. Phrase</button>
-            <button onclick="genererMotDePasse()" style="flex:1">2. Transformer</button>
-        </div>
-        <div id="resultat-container">
-            <div class="password-display">Le résultat s'affichera ici...</div>
-        </div>
+    
+    <div class="container-full">
+        <h2 style="margin-top:0">GÉNÉRATEUR</h2>
+        
+        <input type="text" id="phrase" readonly 
+               style="width:100%; padding:20px; background:rgba(0,0,0,0.4); border:1px solid #444; color:white; border-radius:10px; margin-bottom:15px; text-align:center; font-size:1.1rem;" 
+               placeholder="Votre phrase ici...">
+
+        <button onclick="genererPhraseGrammaticale()">1. CRÉER PHRASE</button>
+        <button onclick="genererMotDePasse()" style="background: var(--primary-yellow);">2. SÉCURISER</button>
+        
+        <div id="resultat-container" style="margin-top:20px;">
+            </div>
+
         <a href="index.html" class="back-link">← Retour au menu</a>
     </div>
     <script>

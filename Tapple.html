@@ -15,16 +15,24 @@
 </head>
 <body>
     <div class="logo-container"><div class="logo-text">GS STUDIO</div></div>
-    <div class="app-card-full">
-        <h1 style="color: var(--primary-yellow)">TAPPLE +</h1>
-        <div class="difficulty-selector">
-            <button class="diff-btn active" data-level="Facile" onclick="setDifficulty('Facile')">Facile</button>
-            <button class="diff-btn" data-level="Moyen" onclick="setDifficulty('Moyen')">Moyen</button>
-            <button class="diff-btn" data-level="Difficile" onclick="setDifficulty('Difficile')">Difficile</button>
+    
+    <div class="container-full">
+        <h2 style="color:var(--primary-yellow); margin-top:0;">TAPPLE +</h2>
+        
+        <div id="category" style="font-size: 1.5rem; padding: 30px 10px; color: var(--primary-blue); font-weight: bold; min-height: 120px; display: flex; align-items: center; justify-content: center;">
+            Prêt à jouer ?
         </div>
-        <div id="category">Choisissez un niveau et cliquez !</div>
-        <button onclick="newCategory()" style="width: 100%;">NOUVELLE CATÉGORIE</button>
-        <div class="count" id="stat">230+ catégories chargées</div>
+
+        <button onclick="newCategory()" style="background: var(--primary-yellow); font-size: 1.3rem; height: 80px;">
+            NOUVELLE CATÉGORIE
+        </button>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-top: 20px;">
+            <button class="diff-btn" onclick="setDifficulty('Facile')" style="min-height: 40px; font-size: 0.8rem;">Facile</button>
+            <button class="diff-btn" onclick="setDifficulty('Moyen')" style="min-height: 40px; font-size: 0.8rem;">Moyen</button>
+            <button class="diff-btn" onclick="setDifficulty('Difficile')" style="min-height: 40px; font-size: 0.8rem;">Expert</button>
+        </div>
+
         <a href="index.html" class="back-link">← Retour au menu</a>
     </div>
     
