@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gs-studio-v1.1';
+const CACHE_NAME = 'gs-studio-v1.2';
 const ASSETS = [
   'index.html',
   'Tapple.html',
@@ -26,3 +26,4 @@ self.addEventListener('message', (event) => {
     event.ports[0].postMessage(CACHE_NAME);
   }
 });
+
