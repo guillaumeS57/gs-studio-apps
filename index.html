@@ -22,6 +22,30 @@
             <div class="app-desc">Système de score inclus (10 pts).</div>
         </a>
     </div>
+    <footer>
+        &copy; 2025 GS STUDIO - <span id="app-version">Chargement version...</span>
+    </footer>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').then((reg) => {
+          // On attend que le Service Worker soit prêt/actif
+          navigator.serviceWorker.ready.then((registration) => {
+            
+            // Création d'un canal de communication
+            const messageChannel = new MessageChannel();
+            
+            messageChannel.port1.onmessage = (event) => {
+              // On affiche la valeur reçue (CACHE_NAME) dans le span
+              document.getElementById('app-version').innerText = "Version: " + event.data;
+            };
+    
+            // On envoie la demande au Service Worker actif
+            if (registration.active) {
+              registration.active.postMessage({type: 'GET_VERSION'}, [messageChannel.port2]);
+            }
+          });
+        });
+      }
+    </script>
 
-    <footer style="text-align: center; margin-top: 20px;">&copy; 2024 GS STUDIO</footer>
 </body>
