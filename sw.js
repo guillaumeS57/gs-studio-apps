@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gs-studio-v1';
+const CACHE_NAME = 'gs-studio-v1.1';
 const ASSETS = [
   'index.html',
   'Tapple.html',
