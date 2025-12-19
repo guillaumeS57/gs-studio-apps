@@ -25,27 +25,33 @@
     <footer>
         &copy; 2025 GS STUDIO - <span id="app-version">Chargement version...</span>
     </footer>
-    <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').then((reg) => {
-          // On attend que le Service Worker soit prêt/actif
-          navigator.serviceWorker.ready.then((registration) => {
-            
-            // Création d'un canal de communication
-            const messageChannel = new MessageChannel();
-            
-            messageChannel.port1.onmessage = (event) => {
-              // On affiche la valeur reçue (CACHE_NAME) dans le span
-              document.getElementById('app-version').innerText = "Version: " + event.data;
-            };
-    
-            // On envoie la demande au Service Worker actif
-            if (registration.active) {
-              registration.active.postMessage({type: 'GET_VERSION'}, [messageChannel.port2]);
-            }
-          });
-        });
-      }
-    </script>
+   <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').then((reg) => {
+      // On s'assure que le service worker est prêt
+      navigator.serviceWorker.ready.then((registration) => {
+        const getVersion = () => {
+          if (!registration.active) return;
+
+          const messageChannel = new MessageChannel();
+          messageChannel.port1.onmessage = (event) => {
+            // Mise à jour du texte avec la version reçue
+            document.getElementById('app-version').innerText = event.data;
+          };
+
+          // Envoi de la requête
+          registration.active.postMessage({type: 'GET_VERSION'}, [messageChannel.port2]);
+        };
+
+        // On tente de récupérer la version immédiatement
+        getVersion();
+
+        // Si le SW change (mise à jour), on redemande la version
+        registration.addEventListener('updatefound', getVersion);
+      });
+    });
+  }
+</script>
 
 </body>
+
